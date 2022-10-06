@@ -14,7 +14,7 @@
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "algosdk": "^1.21.0",
-    "beaker-ts": "^0.0.35",
+    "beaker-ts": "^0.0.37",
     "buffer": "^6.0.3",
     "framer-motion": "^7.5.2",
     "path-browserify": "^1.0.1",

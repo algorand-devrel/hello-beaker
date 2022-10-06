@@ -82,6 +82,9 @@ export default function WalletSelector(props: AlgorandWalletConnectorProps) {
 
   const walletOptions = [];
   for (const [k, v] of Object.entries(ImplementedWallets)) {
+    const imgSrc = v.img(false)
+    const imgContent = imgSrc === ''?<div></div>: <img alt="wallet-branding" className="wallet-branding" src={imgSrc} />
+
     walletOptions.push(
       <li key={k}>
         <Button
@@ -90,12 +93,8 @@ export default function WalletSelector(props: AlgorandWalletConnectorProps) {
           variant="outline"
           onClick={handleSelectedWallet}
         >
+          {imgContent}
           <div className="wallet-option">
-            <img
-              alt="wallet-branding"
-              className="wallet-branding"
-              src={v.img(false)}
-            />
             <h5>{v.displayName()}</h5>
           </div>
         </Button>
