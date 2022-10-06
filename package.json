@@ -9,11 +9,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "beaker-ts": "^0.0.34",
+    "@chakra-ui/icons": "^2.0.11",
+    "@chakra-ui/react": "^2.3.5",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "algosdk": "^1.21.0",
+    "beaker-ts": "^0.0.35",
     "buffer": "^6.0.3",
+    "framer-motion": "^7.5.2",
     "path-browserify": "^1.0.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",
