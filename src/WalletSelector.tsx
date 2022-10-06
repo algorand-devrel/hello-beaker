@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { SessionWallet, ImplementedWallets } from "beaker-ts/lib/web";
+
 import {
   Select,
   Button,
@@ -15,7 +16,7 @@ import {
   Flex,
   IconButton,
 } from "@chakra-ui/react";
-import {SmallCloseIcon} from "@chakra-ui/icons"
+import { SmallCloseIcon } from "@chakra-ui/icons";
 
 type AlgorandWalletConnectorProps = {
   network: string;
@@ -134,7 +135,7 @@ export default function WalletSelector(props: AlgorandWalletConnectorProps) {
 
   return (
     <div>
-      <Box flexFlow='right'>
+      <Box flexFlow="right">
         <Flex alignItems="right">
           <Select
             size="md"
@@ -152,12 +153,12 @@ export default function WalletSelector(props: AlgorandWalletConnectorProps) {
             })}
           </Select>
           <IconButton
-            colorScheme='red'
+            colorScheme="red"
             variant="ghost"
             aria-label="disconnect wallet"
-            onClick={disconnectWallet} 
-            icon={ <SmallCloseIcon />}
-            />
+            onClick={disconnectWallet}
+            icon={<SmallCloseIcon />}
+          />
         </Flex>
       </Box>
     </div>
