@@ -14,9 +14,11 @@
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "algosdk": "^1.21.0",
-    "beaker-ts": "^0.0.37",
+    "beaker-ts": "^0.0.44",
     "buffer": "^6.0.3",
     "framer-motion": "^7.5.2",
+    "global": "^4.4.0",
+    "npx": "^10.2.2",
     "path-browserify": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -26,6 +28,7 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.1.0",
+    "tsx": "^3.9.0",
     "typescript": "^4.6.4",
     "vite": "^3.1.0"
   }
