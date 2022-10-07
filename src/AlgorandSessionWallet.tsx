@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogActions,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close"
+import CloseIcon from "@mui/icons-material/Close";
 
 type AlgorandSessionWalletProps = {
   network: string;
@@ -20,7 +20,7 @@ type AlgorandSessionWalletProps = {
 export default function AlgorandSessionWallet(
   props: AlgorandSessionWalletProps
 ) {
-  const [ selectorOpen, setSelectorOpen ] = React.useState<boolean>(false);
+  const [selectorOpen, setSelectorOpen] = React.useState<boolean>(false);
   const { sessionWallet, updateWallet } = props;
 
   React.useEffect(() => {
@@ -71,7 +71,7 @@ export default function AlgorandSessionWallet(
   }
 
   const connected = props.sessionWallet?.connected();
-  console.log("Connected? ", connected)
+  console.log("Connected? ", connected);
   const display = !connected ? (
     <Button
       color="warning"
@@ -88,17 +88,22 @@ export default function AlgorandSessionWallet(
         onChange={handleChangeAccount}
         defaultValue={sessionWallet?.accountIndex()}
       >
-         {sessionWallet?.wallet.accounts.map((addr, idx) => {
-           return (
-             <option value={idx} key={idx}>{addr.slice(0, 8)}</option>
-           );
-         })}
-
+        {sessionWallet?.wallet.accounts.map((addr, idx) => {
+          return (
+            <option value={idx} key={idx}>
+              {addr.slice(0, 8)}
+            </option>
+          );
+        })}
       </Select>
-      <Button endIcon={<CloseIcon />} color="warning" variant="outlined" onClick={disconnectWallet} />
+      <Button
+        endIcon={<CloseIcon />}
+        color="warning"
+        variant="outlined"
+        onClick={disconnectWallet}
+      />
     </Box>
   );
-
 
   return (
     <div>
@@ -106,7 +111,9 @@ export default function AlgorandSessionWallet(
       <WalletSelectorDialog
         open={selectorOpen}
         handleSelection={handleSelectedWallet}
-        onClose={()=>{setSelectorOpen(false)}}
+        onClose={() => {
+          setSelectorOpen(false);
+        }}
       />
     </div>
   );
@@ -121,7 +128,7 @@ type WalletSelectorDialogProps = {
 function WalletSelectorDialog(props: WalletSelectorDialogProps) {
   function handleWalletSelected(e: any) {
     props.handleSelection(e.currentTarget.id);
-    props.onClose()
+    props.onClose();
   }
 
   const walletOptions = [];
