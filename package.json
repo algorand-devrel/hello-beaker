@@ -9,14 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.0.11",
-    "@chakra-ui/react": "^2.3.5",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.6",
+    "@mui/material": "^5.10.8",
     "algosdk": "^1.21.0",
     "beaker-ts": "^0.0.44",
     "buffer": "^6.0.3",
-    "framer-motion": "^7.5.2",
     "global": "^4.4.0",
     "npx": "^10.2.2",
     "path-browserify": "^1.0.1",

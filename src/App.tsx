@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
-import algosdk from "algosdk";
 import { HelloBeaker } from "./hellobeaker_client";
 import * as bkr from "beaker-ts";
 import { SessionWallet } from "beaker-ts/lib/web";
-import WalletSelector from "./WalletSelector";
-import { Box, Button, Center } from "@chakra-ui/react";
+import WalletSelector from "./AlgorandSessionWallet";
+import { Box, Button } from "@mui/material";
 
 function App() {
-  const [algodClient, setAlgodClient] = useState(bkr.sandbox.getAlgodClient());
+  const [algodClient, setAlgodClient] = useState(bkr.clients.sandboxAlgod());
 
   const [addr, setAddr] = useState<string | undefined>(undefined);
   const [sessionWallet, setSessionWallet] = useState<SessionWallet | undefined>( undefined);
@@ -50,19 +49,19 @@ function App() {
 
   const action =
     appId === undefined ? (
-      <Button variant='outline' onClick={createApp}>Create App</Button>
+      <Button variant='outlined' onClick={createApp}>Create App</Button>
     ) : (
       <div>
         <textarea id="name" placeholder="what is your name?"></textarea>
         <hr />
-        <Button variant='outline' onClick={greet}>Greet</Button>
+        <Button variant='outlined' onClick={greet}>Greet</Button>
       </div>
     );
 
   return (
     <div className="App">
 
-      <Box w='100%' p={4}>
+      <Box >
         <WalletSelector
           network="testnet"
           sessionWallet={sessionWallet}
@@ -70,12 +69,10 @@ function App() {
         ></WalletSelector>
       </Box>
 
-      <Center>
-        <div >
+      <Box>
           <h3>Logged in as: {addr}</h3>
           {action}
-        </div>
-      </Center>
+      </Box>
     </div>
   );
 }
