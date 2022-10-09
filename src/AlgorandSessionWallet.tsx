@@ -13,64 +13,60 @@ import CloseIcon from "@mui/icons-material/Close";
 
 type AlgorandSessionWalletProps = {
   network: string;
-  sessionWallet?: SessionWallet;
-  updateWallet(sw?: SessionWallet): void;
+  wallet?: SessionWallet;
 };
 
 export default function AlgorandSessionWallet(
   props: AlgorandSessionWalletProps
 ) {
   const [selectorOpen, setSelectorOpen] = React.useState<boolean>(false);
-  const { sessionWallet, updateWallet } = props;
+  const { wallet } = props;
 
   React.useEffect(() => {
-    if (sessionWallet?.connected()) return;
+    if (wallet?.connected()) return;
 
     let interval: any;
-    sessionWallet?.connect().then((success) => {
+    wallet?.connect().then((success) => {
       if (!success) return;
       // Check every 500ms to see if we've connected then kill the interval
       // This is most useful in the case of walletconnect where it may be several
       // seconds before the user connects
       interval = setInterval(() => {
-        if (sessionWallet.connected()) {
+        if (wallet.connected()) {
           clearInterval(interval);
-          updateWallet(sessionWallet);
+          //updateWallet(sessionWallet);
         }
       }, 500);
     });
     return () => {
       clearInterval(interval);
     };
-  }, [sessionWallet, updateWallet]);
+  }, [wallet]);
 
   function disconnectWallet() {
-    props.sessionWallet?.disconnect();
-    props.updateWallet(undefined);
+    props.wallet?.disconnect();
+    //props.updateWallet(undefined);
   }
 
   function handleChangeAccount(e: any) {
     const acctIdx = parseInt(e.target.value);
     console.log(`Selected: ${acctIdx}`);
-    props.sessionWallet?.setAccountIndex(acctIdx);
-    props.updateWallet(props.sessionWallet);
+    //props.wallet?.setAccountIndex(acctIdx);
   }
 
   async function handleSelectedWallet(choice: string) {
     if (!(choice in ImplementedWallets)) {
-      if (props.sessionWallet?.wallet !== undefined)
-        props.sessionWallet.disconnect();
+      if (props.wallet?.wallet !== undefined)
+        props.wallet.disconnect();
     }
 
     const sw = new SessionWallet(props.network, choice);
 
     // Try to connect, if it fails bail
     if (!(await sw.connect())) return sw.disconnect();
-
-    props.updateWallet(sw);
   }
 
-  const connected = props.sessionWallet?.connected();
+  const connected = props.wallet?.connected();
   console.log("Connected? ", connected);
   const display = !connected ? (
     <Button
@@ -86,9 +82,9 @@ export default function AlgorandSessionWallet(
     <Box>
       <Select
         onChange={handleChangeAccount}
-        defaultValue={sessionWallet?.accountIndex()}
+        //defaultValue={SessionWallet.getAccountIndex()}
       >
-        {sessionWallet?.wallet.accounts.map((addr, idx) => {
+        {wallet?.wallet.accounts.map((addr, idx) => {
           return (
             <option value={idx} key={idx}>
               {addr.slice(0, 8)}
