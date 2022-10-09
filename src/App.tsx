@@ -50,6 +50,7 @@ function App() {
   //  );
   //}, [algodClient, wallet, appId]);
 
+
   async function createApp() {
     const [appId, ,] = await appClient.create();
     setAppId(appId);
@@ -68,7 +69,7 @@ function App() {
     </Button>
   ) : (
     <div>
-      <Input type="text" id="name" placeholder="what is your name?"></Input>
+      <Input type='text' id="name" placeholder="what is your name?"></Input>
       <hr />
       <Button variant="outlined" onClick={greet}>
         Greet

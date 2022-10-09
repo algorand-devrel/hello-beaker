@@ -84,7 +84,7 @@ export default function AlgorandSessionWallet(
     <Box>
       <Select
         onChange={handleChangeAccount}
-        //defaultValue={SessionWallet.getAccountIndex()}
+        defaultValue={wallet.data.data.defaultAcctIdx}
       >
         {wallet?.wallet.accounts.map((addr, idx) => {
           return (
