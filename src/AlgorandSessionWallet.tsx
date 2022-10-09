@@ -1,5 +1,9 @@
 import * as React from "react";
-import { SessionWallet, ImplementedWallets } from "beaker-ts/lib/web";
+import {
+  SessionWalletData,
+  SessionWallet,
+  ImplementedWallets,
+} from "beaker-ts/lib/web";
 import {
   Select,
   Button,
@@ -13,7 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 type AlgorandSessionWalletProps = {
   network: string;
-  wallet?: SessionWallet;
+  wallet: SessionWallet;
 };
 
 export default function AlgorandSessionWallet(
@@ -22,48 +26,46 @@ export default function AlgorandSessionWallet(
   const [selectorOpen, setSelectorOpen] = React.useState<boolean>(false);
   const { wallet } = props;
 
-  React.useEffect(() => {
-    if (wallet?.connected()) return;
+  //React.useEffect(() => {
+  //  if (wallet.connected()) return;
 
-    let interval: any;
-    wallet?.connect().then((success) => {
-      if (!success) return;
-      // Check every 500ms to see if we've connected then kill the interval
-      // This is most useful in the case of walletconnect where it may be several
-      // seconds before the user connects
-      interval = setInterval(() => {
-        if (wallet.connected()) {
-          clearInterval(interval);
-          //updateWallet(sessionWallet);
-        }
-      }, 500);
-    });
-    return () => {
-      clearInterval(interval);
-    };
-  }, [wallet]);
+  //  let interval: any;
+  //  wallet.connect().then((success) => {
+  //    if (!success) return;
+  //    // Check every 500ms to see if we've connected then kill the interval
+  //    // This is most useful in the case of walletconnect where it may be several
+  //    // seconds before the user connects
+  //    interval = setInterval(() => {
+  //      if (wallet.connected()) {
+  //        clearInterval(interval);
+  //        //updateWallet(sessionWallet);
+  //      }
+  //    }, 500);
+  //  });
+  //  return () => {
+  //    clearInterval(interval);
+  //  };
+  //}, [wallet]);
 
   function disconnectWallet() {
-    props.wallet?.disconnect();
-    //props.updateWallet(undefined);
+    wallet.disconnect();
   }
 
   function handleChangeAccount(e: any) {
     const acctIdx = parseInt(e.target.value);
     console.log(`Selected: ${acctIdx}`);
-    //props.wallet?.setAccountIndex(acctIdx);
+    wallet.setAcctIdx(acctIdx)
   }
 
   async function handleSelectedWallet(choice: string) {
     if (!(choice in ImplementedWallets)) {
-      if (props.wallet?.wallet !== undefined)
-        props.wallet.disconnect();
+      if (wallet.wallet !== undefined) wallet.disconnect();
     }
 
-    const sw = new SessionWallet(props.network, choice);
-
-    // Try to connect, if it fails bail
-    if (!(await sw.connect())) return sw.disconnect();
+    const sw = new SessionWallet(props.network, {
+      walletPreference: choice,
+    } as SessionWalletData);
+    await sw.connect();
   }
 
   const connected = props.wallet?.connected();

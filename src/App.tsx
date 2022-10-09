@@ -2,11 +2,11 @@ import "./App.css";
 import { useState, useEffect } from "react";
 
 import { Network, APIProvider, getAlgodClient } from "beaker-ts/lib/clients";
-import { useSessionWallet } from "beaker-ts/lib/web";
+import { useSessionWallet, DummySigner } from "beaker-ts/lib/web";
 import { HelloBeaker } from "./hellobeaker_client";
 
 import WalletSelector from "./AlgorandSessionWallet";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Input } from "@mui/material";
 
 // Setup config for client/network
 const apiProvider = APIProvider.Sandbox;
@@ -31,25 +31,24 @@ function App() {
   const [appClient, setAppClient] = useState<HelloBeaker>(
     new HelloBeaker({
       client: algodClient,
-      signer: wallet.signer(),
-      sender: wallet.address(),
+      signer: DummySigner,
+      sender: "",
       appId: appId,
     })
   );
 
   // If the wallet or app id change, we should
   // update our app client to reflect it
-  useEffect(() => {
-    setAppClient(
-      new HelloBeaker({
-        client: algodClient,
-        signer: wallet.signer(),
-        sender: wallet.address(),
-        appId: appId,
-      })
-    );
-  }, [algodClient, wallet, appId]);
-
+  //useEffect(() => {
+  //  setAppClient(
+  //    new HelloBeaker({
+  //      client: algodClient,
+  //      signer: wallet.signer(),
+  //      sender: wallet.address(),
+  //      appId: appId,
+  //    })
+  //  );
+  //}, [algodClient, wallet, appId]);
 
   async function createApp() {
     const [appId, ,] = await appClient.create();
@@ -69,7 +68,7 @@ function App() {
     </Button>
   ) : (
     <div>
-      <textarea id="name" placeholder="what is your name?"></textarea>
+      <Input type="text" id="name" placeholder="what is your name?"></Input>
       <hr />
       <Button variant="outlined" onClick={greet}>
         Greet
