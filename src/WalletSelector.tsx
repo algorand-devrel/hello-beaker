@@ -16,19 +16,21 @@ import {
   ButtonGroup,
   IconButton,
 } from "@mui/material";
+
+import LoadingButton from "@mui/lab/LoadingButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { WalletName } from "beaker-ts/lib/web/session_wallet";
 
 type WalletSelectorProps = {
   network: string;
   accountSettings: SessionWalletData;
-  setAccountSettings: (swd: SessionWalletData)=>void;
+  setAccountSettings: (swd: SessionWalletData) => void;
 };
 
 export default function WalletSelector(props: WalletSelectorProps) {
-
   const [selectorOpen, setSelectorOpen] = React.useState<boolean>(false);
-  const {network, accountSettings, setAccountSettings} = props;
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const { network, accountSettings, setAccountSettings } = props;
 
   //React.useEffect(() => {
   //  if (connected) return;
@@ -52,32 +54,35 @@ export default function WalletSelector(props: WalletSelectorProps) {
   //}, [wallet]);
 
   function disconnectWallet() {
-    SessionWalletManager.disconnect(network)
-    setAccountSettings(SessionWalletManager.read(network))
+    SessionWalletManager.disconnect(network);
+    setAccountSettings(SessionWalletManager.read(network));
   }
 
   function handleChangeAccount(e: any) {
     const acctIdx = parseInt(e.target.value);
-    SessionWalletManager.setAcctIdx(network, acctIdx)
-    setAccountSettings(SessionWalletManager.read(network))
+    SessionWalletManager.setAcctIdx(network, acctIdx);
+    setAccountSettings(SessionWalletManager.read(network));
   }
 
   async function handleSelectedWallet(choice: string) {
-    SessionWalletManager.setWalletPreference(network, choice as WalletName)
-    await SessionWalletManager.connect(network)
-    setAccountSettings(SessionWalletManager.read(network))
+    SessionWalletManager.setWalletPreference(network, choice as WalletName);
+    setLoading(true)
+    await SessionWalletManager.connect(network);
+    setAccountSettings(SessionWalletManager.read(network));
+    setLoading(false)
   }
 
   const display = !accountSettings.data.acctList.length ? (
-    <Button
+    <LoadingButton
       variant="contained"
+      loading={loading}
       color="secondary"
       onClick={() => {
         setSelectorOpen(!selectorOpen);
       }}
     >
       Connect Wallet
-    </Button>
+    </LoadingButton>
   ) : (
     <Box>
       <ButtonGroup variant="text">
