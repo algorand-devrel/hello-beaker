@@ -6,7 +6,7 @@ import { PlaceHolderSigner, SessionWalletManager, SessionWalletData } from "beak
 import { HelloBeaker } from "./hellobeaker_client";
 
 import {WalletSelector} from "./AlgorandSessionWallet";
-import { Box, Button, Input } from "@mui/material";
+import { AppBar, Box, Button, Input, Toolbar } from "@mui/material";
 
 // Setup config for client/network
 const apiProvider = APIProvider.Sandbox;
@@ -88,9 +88,14 @@ function App() {
 
   return (
     <div className="App">
-      <Box>
-        <WalletSelector network={network} accountSettings={accountSettings} setAccountSettings={setAccountSettings} />
-      </Box>
+      <AppBar >
+        <Toolbar variant="regular">
+          <Box sx={{flexGrow: 1}} />
+          <Box >
+            <WalletSelector network={network} accountSettings={accountSettings} setAccountSettings={setAccountSettings} />
+          </Box>
+        </Toolbar>
+      </AppBar>
       <Box> {action} </Box>
     </div>
   );

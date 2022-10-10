@@ -13,6 +13,8 @@ import {
   DialogTitle,
   DialogActions,
   MenuItem,
+  ButtonGroup,
+  IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { WalletName } from "beaker-ts/lib/web/session_wallet";
@@ -68,8 +70,8 @@ export function WalletSelector(props: AlgorandSessionWalletProps) {
 
   const display = !accountSettings.data.acctList.length ? (
     <Button
-      color="warning"
-      variant="outlined"
+      variant="contained"
+      color="secondary"
       onClick={() => {
         setSelectorOpen(!selectorOpen);
       }}
@@ -78,24 +80,24 @@ export function WalletSelector(props: AlgorandSessionWalletProps) {
     </Button>
   ) : (
     <Box>
-      <Select
-        onChange={handleChangeAccount}
-        value={accountSettings.data.defaultAcctIdx}
-      >
-        {accountSettings.data.acctList.map((addr, idx) => {
-          return (
-            <MenuItem value={idx} key={idx}>
-              {addr.slice(0, 8)}
-            </MenuItem>
-          );
-        })}
-      </Select>
-      <Button
-        endIcon={<CloseIcon />}
-        color="warning"
-        variant="outlined"
-        onClick={disconnectWallet}
-      />
+      <ButtonGroup variant="text">
+        <Select
+          onChange={handleChangeAccount}
+          variant="standard"
+          value={accountSettings.data.defaultAcctIdx}
+        >
+          {accountSettings.data.acctList.map((addr, idx) => {
+            return (
+              <MenuItem value={idx} key={idx}>
+                {addr.slice(0, 8)}
+              </MenuItem>
+            );
+          })}
+        </Select>
+        <IconButton onClick={disconnectWallet} size="small">
+          <CloseIcon htmlColor="red" />
+        </IconButton>
+      </ButtonGroup>
     </Box>
   );
 
