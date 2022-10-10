@@ -1,8 +1,8 @@
 import * as React from "react";
 import {
   SessionWalletData,
-  SessionWallet,
   ImplementedWallets,
+  SessionWalletManager,
 } from "beaker-ts/lib/web";
 import {
   Select,
@@ -12,22 +12,24 @@ import {
   DialogContent,
   DialogTitle,
   DialogActions,
+  MenuItem,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { WalletName } from "beaker-ts/lib/web/session_wallet";
 
 type AlgorandSessionWalletProps = {
   network: string;
-  wallet: SessionWallet;
+  accountSettings: SessionWalletData;
+  setAccountSettings: (swd: SessionWalletData)=>void;
 };
 
-export default function AlgorandSessionWallet(
-  props: AlgorandSessionWalletProps
-) {
+export function WalletSelector(props: AlgorandSessionWalletProps) {
+
   const [selectorOpen, setSelectorOpen] = React.useState<boolean>(false);
-  const { wallet } = props;
+  const {network, accountSettings, setAccountSettings} = props;
 
   //React.useEffect(() => {
-  //  if (wallet.connected()) return;
+  //  if (connected) return;
 
   //  let interval: any;
   //  wallet.connect().then((success) => {
@@ -48,29 +50,23 @@ export default function AlgorandSessionWallet(
   //}, [wallet]);
 
   function disconnectWallet() {
-    wallet.disconnect();
+    SessionWalletManager.disconnect(network)
+    setAccountSettings(SessionWalletManager.read(network))
   }
 
   function handleChangeAccount(e: any) {
     const acctIdx = parseInt(e.target.value);
-    console.log(`Selected: ${acctIdx}`);
-    wallet.setAcctIdx(acctIdx)
+    SessionWalletManager.setAcctIdx(network, acctIdx)
+    setAccountSettings(SessionWalletManager.read(network))
   }
 
   async function handleSelectedWallet(choice: string) {
-    if (!(choice in ImplementedWallets)) {
-      if (wallet.wallet !== undefined) wallet.disconnect();
-    }
-
-    const sw = new SessionWallet(props.network, {
-      walletPreference: choice,
-    } as SessionWalletData);
-    await sw.connect();
+    SessionWalletManager.setWalletPreference(network, choice as WalletName)
+    await SessionWalletManager.connect(network)
+    setAccountSettings(SessionWalletManager.read(network))
   }
 
-  const connected = props.wallet?.connected();
-  console.log("Connected? ", connected);
-  const display = !connected ? (
+  const display = !accountSettings.data.acctList.length ? (
     <Button
       color="warning"
       variant="outlined"
@@ -84,13 +80,13 @@ export default function AlgorandSessionWallet(
     <Box>
       <Select
         onChange={handleChangeAccount}
-        defaultValue={wallet.data.data.defaultAcctIdx}
+        value={accountSettings.data.defaultAcctIdx}
       >
-        {wallet?.wallet.accounts.map((addr, idx) => {
+        {accountSettings.data.acctList.map((addr, idx) => {
           return (
-            <option value={idx} key={idx}>
+            <MenuItem value={idx} key={idx}>
               {addr.slice(0, 8)}
-            </option>
+            </MenuItem>
           );
         })}
       </Select>

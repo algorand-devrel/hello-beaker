@@ -1,37 +1,34 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-
+import algosdk from 'algosdk'
 import { Network, APIProvider, getAlgodClient } from "beaker-ts/lib/clients";
-import { useSessionWallet, DummySigner } from "beaker-ts/lib/web";
+import { PlaceHolderSigner, SessionWalletManager, SessionWalletData } from "beaker-ts/lib/web";
 import { HelloBeaker } from "./hellobeaker_client";
 
-import WalletSelector from "./AlgorandSessionWallet";
+import {WalletSelector} from "./AlgorandSessionWallet";
 import { Box, Button, Input } from "@mui/material";
 
 // Setup config for client/network
 const apiProvider = APIProvider.Sandbox;
 const network = Network.SandNet;
 
+
 function App() {
   // Start with no app id for this demo, since we allow creation
   // Otherwise it'd come in as part of conf
   const [appId, setAppId] = useState<number>(0);
 
+  const [accountSettings, setAccountSettings] = useState<SessionWalletData>(SessionWalletManager.read(network))
+
   // Init our algod client
   const algodClient = getAlgodClient(apiProvider, network);
-
-  // Init our wallet, will try to get from session storage
-  //   Internally it checks session storage to see if we've got
-  //   an active session and initializes appropriate wallet
-  //   given user preferences
-  const { wallet, connected } = useSessionWallet(network);
 
   // Init our app client
   // Assumes we have a signer/address which may not be true
   const [appClient, setAppClient] = useState<HelloBeaker>(
     new HelloBeaker({
       client: algodClient,
-      signer: DummySigner,
+      signer: PlaceHolderSigner,
       sender: "",
       appId: appId,
     })
@@ -39,16 +36,28 @@ function App() {
 
   // If the wallet or app id change, we should
   // update our app client to reflect it
-  //useEffect(() => {
-  //  setAppClient(
-  //    new HelloBeaker({
-  //      client: algodClient,
-  //      signer: wallet.signer(),
-  //      sender: wallet.address(),
-  //      appId: appId,
-  //    })
-  //  );
-  //}, [algodClient, wallet, appId]);
+  useEffect(() => {
+    if(accountSettings.data.acctList.length == 0){
+      setAppClient(
+        new HelloBeaker({
+          client: algodClient,
+          signer: PlaceHolderSigner, 
+          sender: "",
+          appId: appId,
+        })
+      );
+      return
+    }
+
+    setAppClient(
+      new HelloBeaker({
+        client: algodClient,
+        signer: SessionWalletManager.signer(network),
+        sender: SessionWalletManager.address(network),
+        appId: appId,
+      })
+    );
+  }, [accountSettings]);
 
 
   async function createApp() {
@@ -80,7 +89,7 @@ function App() {
   return (
     <div className="App">
       <Box>
-        <WalletSelector network={network} wallet={wallet} />
+        <WalletSelector network={network} accountSettings={accountSettings} setAccountSettings={setAccountSettings} />
       </Box>
       <Box> {action} </Box>
     </div>
