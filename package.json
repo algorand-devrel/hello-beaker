@@ -14,6 +14,7 @@
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.8",
     "algosdk": "^1.21.0",
+    "beaker-ts": "^0.0.46",
     "buffer": "^6.0.3",
     "global": "^4.4.0",
     "npx": "^10.2.2",
