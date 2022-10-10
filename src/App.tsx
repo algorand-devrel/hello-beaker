@@ -5,7 +5,7 @@ import { Network, APIProvider, getAlgodClient } from "beaker-ts/lib/clients";
 import { PlaceHolderSigner, SessionWalletManager, SessionWalletData } from "beaker-ts/lib/web";
 import { HelloBeaker } from "./hellobeaker_client";
 
-import {WalletSelector} from "./AlgorandSessionWallet";
+import WalletSelector from "./WalletSelector";
 import { AppBar, Box, Button, Input, Toolbar } from "@mui/material";
 
 // Setup config for client/network

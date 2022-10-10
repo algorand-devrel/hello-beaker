@@ -19,13 +19,13 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { WalletName } from "beaker-ts/lib/web/session_wallet";
 
-type AlgorandSessionWalletProps = {
+type WalletSelectorProps = {
   network: string;
   accountSettings: SessionWalletData;
   setAccountSettings: (swd: SessionWalletData)=>void;
 };
 
-export function WalletSelector(props: AlgorandSessionWalletProps) {
+export default function WalletSelector(props: WalletSelectorProps) {
 
   const [selectorOpen, setSelectorOpen] = React.useState<boolean>(false);
   const {network, accountSettings, setAccountSettings} = props;
