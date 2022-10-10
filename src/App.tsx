@@ -96,7 +96,7 @@ function App() {
           </Box>
         </Toolbar>
       </AppBar>
-      <Box> {action} </Box>
+      <Box sx={{marginTop: '10%'}} > {action} </Box>
     </div>
   );
 }
