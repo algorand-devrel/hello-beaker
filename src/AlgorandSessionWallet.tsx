@@ -1,5 +1,9 @@
 import * as React from "react";
-import { SessionWallet, ImplementedWallets } from "beaker-ts/lib/web";
+import {
+  SessionWalletData,
+  ImplementedWallets,
+  SessionWalletManager,
+} from "beaker-ts/lib/web";
 import {
   Select,
   Button,
@@ -8,71 +12,61 @@ import {
   DialogContent,
   DialogTitle,
   DialogActions,
+  MenuItem,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { WalletName } from "beaker-ts/lib/web/session_wallet";
 
 type AlgorandSessionWalletProps = {
   network: string;
-  sessionWallet?: SessionWallet;
-  updateWallet(sw?: SessionWallet): void;
+  accountSettings: SessionWalletData;
+  setAccountSettings: (swd: SessionWalletData)=>void;
 };
 
-export default function AlgorandSessionWallet(
-  props: AlgorandSessionWalletProps
-) {
+export function WalletSelector(props: AlgorandSessionWalletProps) {
+
   const [selectorOpen, setSelectorOpen] = React.useState<boolean>(false);
-  const { sessionWallet, updateWallet } = props;
+  const {network, accountSettings, setAccountSettings} = props;
 
-  React.useEffect(() => {
-    if (sessionWallet?.connected()) return;
+  //React.useEffect(() => {
+  //  if (connected) return;
 
-    let interval: any;
-    sessionWallet?.connect().then((success) => {
-      if (!success) return;
-      // Check every 500ms to see if we've connected then kill the interval
-      // This is most useful in the case of walletconnect where it may be several
-      // seconds before the user connects
-      interval = setInterval(() => {
-        if (sessionWallet.connected()) {
-          clearInterval(interval);
-          updateWallet(sessionWallet);
-        }
-      }, 500);
-    });
-    return () => {
-      clearInterval(interval);
-    };
-  }, [sessionWallet, updateWallet]);
+  //  let interval: any;
+  //  wallet.connect().then((success) => {
+  //    if (!success) return;
+  //    // Check every 500ms to see if we've connected then kill the interval
+  //    // This is most useful in the case of walletconnect where it may be several
+  //    // seconds before the user connects
+  //    interval = setInterval(() => {
+  //      if (wallet.connected()) {
+  //        clearInterval(interval);
+  //        //updateWallet(sessionWallet);
+  //      }
+  //    }, 500);
+  //  });
+  //  return () => {
+  //    clearInterval(interval);
+  //  };
+  //}, [wallet]);
 
   function disconnectWallet() {
-    props.sessionWallet?.disconnect();
-    props.updateWallet(undefined);
+    SessionWalletManager.disconnect(network)
+    setAccountSettings(SessionWalletManager.read(network))
   }
 
   function handleChangeAccount(e: any) {
     const acctIdx = parseInt(e.target.value);
-    console.log(`Selected: ${acctIdx}`);
-    props.sessionWallet?.setAccountIndex(acctIdx);
-    props.updateWallet(props.sessionWallet);
+    SessionWalletManager.setAcctIdx(network, acctIdx)
+    setAccountSettings(SessionWalletManager.read(network))
   }
 
   async function handleSelectedWallet(choice: string) {
-    if (!(choice in ImplementedWallets)) {
-      if (props.sessionWallet?.wallet !== undefined)
-        props.sessionWallet.disconnect();
-    }
-
-    const sw = new SessionWallet(props.network, choice);
-
-    // Try to connect, if it fails bail
-    if (!(await sw.connect())) return sw.disconnect();
-
-    props.updateWallet(sw);
+    SessionWalletManager.setWalletPreference(network, choice as WalletName)
+    await SessionWalletManager.connect(network)
+    setAccountSettings(SessionWalletManager.read(network))
   }
 
-  const connected = props.sessionWallet?.connected();
-  console.log("Connected? ", connected);
-  const display = !connected ? (
+  const display = !accountSettings.data.acctList.length ? (
     <Button
       color="warning"
       variant="outlined"
@@ -86,13 +80,13 @@ export default function AlgorandSessionWallet(
     <Box>
       <Select
         onChange={handleChangeAccount}
-        defaultValue={sessionWallet?.accountIndex()}
+        value={accountSettings.data.defaultAcctIdx}
       >
-        {sessionWallet?.wallet.accounts.map((addr, idx) => {
+        {accountSettings.data.acctList.map((addr, idx) => {
           return (
-            <option value={idx} key={idx}>
+            <MenuItem value={idx} key={idx}>
               {addr.slice(0, 8)}
-            </option>
+            </MenuItem>
           );
         })}
       </Select>
