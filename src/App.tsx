@@ -1,12 +1,10 @@
-import "./App.css";
 import { useState, useEffect } from "react";
-import algosdk from 'algosdk'
 import { Network, APIProvider, getAlgodClient } from "beaker-ts/lib/clients";
 import { PlaceHolderSigner, SessionWalletManager, SessionWalletData } from "beaker-ts/lib/web";
 import { HelloBeaker } from "./hellobeaker_client";
 
 import WalletSelector from "./WalletSelector";
-import { AppBar, Box, Button, Input, Toolbar } from "@mui/material";
+import { AppBar, Box, Button, Container, Grid, Input, Toolbar } from "@mui/material";
 
 // Setup config for client/network
 const apiProvider = APIProvider.Sandbox;
@@ -78,17 +76,20 @@ function App() {
     </Button>
   ) : (
     <div>
+      <Box>
       <Input type='text' id="name" placeholder="what is your name?"></Input>
-      <hr />
-      <Button variant="outlined" onClick={greet}>
-        Greet
-      </Button>
+      </Box>
+      <Box marginTop="10px">
+        <Button variant="outlined" onClick={greet}>
+          Greet
+        </Button>
+      </Box>
     </div>
   );
 
   return (
     <div className="App">
-      <AppBar >
+      <AppBar position="static">
         <Toolbar variant="regular">
           <Box sx={{flexGrow: 1}} />
           <Box >
@@ -96,7 +97,13 @@ function App() {
           </Box>
         </Toolbar>
       </AppBar>
-      <Box sx={{marginTop: '10%'}} > {action} </Box>
+      <Grid container direction="column" justifyContent="center" alignItems="center">
+        <Grid item lg>
+          <Box margin="10px">
+            {action}
+          </Box>
+        </Grid>
+      </Grid>
     </div>
   );
 }
