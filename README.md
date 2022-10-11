@@ -6,7 +6,7 @@ Hello Beaker Example
 git clone git@github.com:algorand-devrel/hello-beaker.git
 cd hello-beaker
 yarn #installs stuff
-yarn start dev # starts the dev server
+yarn run dev # starts the dev server
 ```
 
 To modify the contract
@@ -18,5 +18,5 @@ pip install beaker-pyteal
 # .. edit file
 python hello.py # generates files in contracts/artifacts
 cd ..
-yarn run regen # Generates the client in src/hellobeaker_client.ts from contracts/artifacts/HelloBeaker.json
+yarn run rebuild # Generates the client in src/hellobeaker_client.ts from contracts/artifacts/HelloBeaker.json
 ```
