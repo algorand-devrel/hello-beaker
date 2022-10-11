@@ -47,9 +47,10 @@ export default function App() {
   // update our app client
   useEffect(() => {
     // Bad way to track connected status but...
+
     if (accountSettings.data.acctList.length == 0) {
-      setAppClient(AnonClient(algodClient, appId));
-    }else{
+      // setAppClient(AnonClient(algodClient, appId));
+    }else if (SessionWalletManager.address(network) != appClient.sender){
       setAppClient(
         new HelloBeaker({
           client: algodClient,
