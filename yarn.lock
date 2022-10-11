@@ -1004,10 +1004,10 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-beaker-ts@^0.0.47:
-  version "0.0.47"
-  resolved "https://registry.yarnpkg.com/beaker-ts/-/beaker-ts-0.0.47.tgz#ebe30ecfd73ad9d5d1cc0ed0cfb5dde94abd5975"
-  integrity sha512-LdrxM7TdAG8jIH2/Op/Y1UgJoAy6pFKKxzX8ItsmFVl+Uru3biy5X1EXZy1V8xbdWeNH82PaxjWOOafkaVvQqw==
+beaker-ts@^0.0.48:
+  version "0.0.48"
+  resolved "https://registry.yarnpkg.com/beaker-ts/-/beaker-ts-0.0.48.tgz#4f4583e63b9b181c813a01f14ed653c5996dc2d4"
+  integrity sha512-wKqSFhJlSVwoZfsN924bIrtnGB212cxlXwpy5rCeeNzDaSB7QO19c8DkD53xNU2LK1cDh/+Uo9TgKl3mZfesWA==
   dependencies:
     "@json-rpc-tools/utils" "^1.7.6"
     "@randlabs/myalgo-connect" "^1.1.0"

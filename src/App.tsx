@@ -47,9 +47,8 @@ export default function App() {
   // update our app client
   useEffect(() => {
     // Bad way to track connected status but...
-
-    if (accountSettings.data.acctList.length == 0) {
-      // setAppClient(AnonClient(algodClient, appId));
+    if (accountSettings.data.acctList.length == 0 && appClient.sender !== "") {
+      setAppClient(AnonClient(algodClient, appId));
     }else if (SessionWalletManager.address(network) != appClient.sender){
       setAppClient(
         new HelloBeaker({
@@ -64,7 +63,7 @@ export default function App() {
 
   // Deploy the app on chain
   async function createApp() {
-    const [appId, ,] = await appClient.create();
+    const {appId} = await appClient.create();
     setAppId(appId);
     alert(`Created app: ${appId}`);
   }
