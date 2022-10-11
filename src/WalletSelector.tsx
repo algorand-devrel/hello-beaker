@@ -139,16 +139,16 @@ function WalletSelectorDialog(props: WalletSelectorDialogProps) {
       imgSrc === "" ? (
         <div></div>
       ) : (
-        <img alt="wallet-branding" className="wallet-branding" src={imgSrc} />
+        <img alt="wallet-branding" style={{width:"2em", margin:"0.5em"}} src={imgSrc} />
       );
 
     walletOptions.push(
-      <li key={k}>
+      <li key={k} style={{margin:"1em"}}>
         <Button id={k} variant="outlined" onClick={handleWalletSelected}>
           {imgContent}
-          <div className="wallet-option">
+          <Box sx={{display:"flex", alignItems:"center"}}>
             <h5>{v.displayName()}</h5>
-          </div>
+          </Box>
         </Button>
       </li>
     );
@@ -159,7 +159,7 @@ function WalletSelectorDialog(props: WalletSelectorDialogProps) {
       <Dialog open={props.open} onClose={props.onClose}>
         <DialogTitle> Select Wallet </DialogTitle>
         <DialogContent>
-          <ul className="wallet-option-list">{walletOptions}</ul>
+          <ul style={{listStyle:"none"}} >{walletOptions}</ul>
         </DialogContent>
         <DialogActions>
           <Button onClick={props.onClose}> cancel </Button>
