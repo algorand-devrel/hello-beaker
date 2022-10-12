@@ -15,7 +15,7 @@ yarn #installs stuff
 yarn run dev # starts the dev server
 ```
 
-### Modify the contract:
+### Tweak the Contract
 
 ```sh
 cd contracts
