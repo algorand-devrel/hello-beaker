@@ -9,7 +9,7 @@ import {
 import { HelloBeaker } from "./hellobeaker_client";
 
 import WalletSelector from "./WalletSelector";
-import { AppBar, Box, Button, Grid, Input, Toolbar } from "@mui/material";
+import { AppBar, Box, Grid, Input, Toolbar } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 
 // AnonClient can still allow reads for an app but no transactions
