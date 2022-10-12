@@ -15,15 +15,27 @@ yarn #installs stuff
 yarn run dev # starts the dev server
 ```
 
-### Tweak the Contract
+## Tweak the Contract
+
+### Get Beaker
 
 ```sh
 cd contracts
 python3.10 -m venv .venv
 source .venv/bin/activate
 pip install beaker-pyteal
-# .. edit file
-python hello.py # generates files in contracts/artifacts
-cd ..
-yarn run rebuild # Generates the client in src/hellobeaker_client.ts from contracts/artifacts/HelloBeaker.json
+```
+
+### Regenerate the Application Spec
+
+```sh
+python hello.py
+# ... writes to `./artifacts`
+```
+
+### Rebuild the client
+
+```sh
+yarn run rebuild 
+# ... generates the client in src/hellobeaker_client.ts from contracts/artifacts/HelloBeaker.json
 ```
