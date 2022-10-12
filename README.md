@@ -19,7 +19,7 @@ yarn #installs stuff
 start the yarn dev server
 
 ```sh
-yarn run dev # starts the dev server
+yarn run dev
 ```
 
 ## Tweak the Contract
