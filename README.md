@@ -1,15 +1,22 @@
 Hello Beaker Example
 --------------------
 
+### Get it
 
 ```sh
 git clone git@github.com:algorand-devrel/hello-beaker.git
 cd hello-beaker
 yarn #installs stuff
+```
+
+### Run Frontend
+
+```sh
 yarn run dev # starts the dev server
 ```
 
-To modify the contract
+### Modify the contract:
+
 ```sh
 cd contracts
 python3.10 -m venv .venv
