@@ -1,6 +1,9 @@
 Hello Beaker Example
 --------------------
 
+An example to show the use of a [Beaker](https://beaker.algo.xyz) application to do some of the work for us when building a front end.
+
+
 ### Get it
 
 download the beaker repo and install dependencies 
