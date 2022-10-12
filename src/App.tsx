@@ -10,6 +10,7 @@ import { HelloBeaker } from "./hellobeaker_client";
 
 import WalletSelector from "./WalletSelector";
 import { AppBar, Box, Button, Grid, Input, Toolbar } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 
 // AnonClient can still allow reads for an app but no transactions
 // can be signed
@@ -33,6 +34,8 @@ export default function App() {
   // Init our algod client
   const algodClient = getAlgodClient(apiProvider, network);
 
+  const [loading, setLoading] = useState(false);
+
   // Set up user wallet from session
   const [accountSettings, setAccountSettings] = useState<SessionWalletData>(
     SessionWalletManager.read(network)
@@ -49,7 +52,7 @@ export default function App() {
     // Bad way to track connected status but...
     if (accountSettings.data.acctList.length == 0 && appClient.sender !== "") {
       setAppClient(AnonClient(algodClient, appId));
-    }else if (SessionWalletManager.address(network) != appClient.sender){
+    }else if (SessionWalletManager.connected(network) && SessionWalletManager.address(network) != appClient.sender){
       setAppClient(
         new HelloBeaker({
           client: algodClient,
@@ -63,32 +66,36 @@ export default function App() {
 
   // Deploy the app on chain
   async function createApp() {
+    setLoading(true)
     const {appId} = await appClient.create();
     setAppId(appId);
     alert(`Created app: ${appId}`);
+    setLoading(false)
   }
 
   // Call the greet function
   async function greet() {
+    setLoading(true)
     const ta = document.getElementById("name") as HTMLTextAreaElement;
     const result = await appClient.hello({ name: ta.value });
     alert(result.value);
+    setLoading(false)
   }
 
   // The two actions we allow
   const action = !appId ? (
-    <Button variant="outlined" onClick={createApp}>
+    <LoadingButton variant="outlined" onClick={createApp} loading={loading}>
       Create App
-    </Button>
+    </LoadingButton>
   ) : (
     <div>
       <Box>
         <Input type="text" id="name" placeholder="what is your name?"></Input>
       </Box>
       <Box marginTop="10px">
-        <Button variant="outlined" onClick={greet}>
+        <LoadingButton variant="outlined" onClick={greet} loading={loading}>
           Greet
-        </Button>
+        </LoadingButton>
       </Box>
     </div>
   );

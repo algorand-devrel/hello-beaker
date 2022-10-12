@@ -642,7 +642,7 @@
     "@walletconnect/window-metadata" "1.0.0"
     detect-browser "5.2.0"
 
-"@walletconnect/client@^1.6.5":
+"@walletconnect/client@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@walletconnect/client/-/client-1.8.0.tgz#6f46b5499c7c861c651ff1ebe5da5b66225ca696"
   integrity sha512-svyBQ14NHx6Cs2j4TpkQaBI/2AF4+LXz64FojTjMtV4VMMhl81jSO1vNeg+yYhQzvjcGH/GpSwixjyCW0xFBOQ==
@@ -714,7 +714,7 @@
   resolved "https://registry.yarnpkg.com/@walletconnect/mobile-registry/-/mobile-registry-1.4.0.tgz#502cf8ab87330841d794819081e748ebdef7aee5"
   integrity sha512-ZtKRio4uCZ1JUF7LIdecmZt7FOLnX72RPSY7aUVu7mj7CSfxDwUn6gBuK6WGtH+NZCldBqDl5DenI5fFSvkKYw==
 
-"@walletconnect/qrcode-modal@^1.6.5":
+"@walletconnect/qrcode-modal@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@walletconnect/qrcode-modal/-/qrcode-modal-1.8.0.tgz#ddd6f5c9b7ee52c16adf9aacec2a3eac4994caea"
   integrity sha512-BueaFefaAi8mawE45eUtztg3ZFbsAH4DDXh1UNwdUlsvFMjqcYzLUG0xZvDd6z2eOpbgDg2N3bl6gF0KONj1dg==
@@ -1004,15 +1004,15 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-beaker-ts@^0.0.48:
-  version "0.0.48"
-  resolved "https://registry.yarnpkg.com/beaker-ts/-/beaker-ts-0.0.48.tgz#4f4583e63b9b181c813a01f14ed653c5996dc2d4"
-  integrity sha512-wKqSFhJlSVwoZfsN924bIrtnGB212cxlXwpy5rCeeNzDaSB7QO19c8DkD53xNU2LK1cDh/+Uo9TgKl3mZfesWA==
+beaker-ts@^0.0.51:
+  version "0.0.51"
+  resolved "https://registry.yarnpkg.com/beaker-ts/-/beaker-ts-0.0.51.tgz#7a4d2b4a138d98d9422a7d910ea99e7178824b5a"
+  integrity sha512-7b2Nq7wgHGYxDqolfmfnFywPYSYn+VYQ0iXD8OOHf8QLrJYnikOuqbuXK8FuSgZq6I6N8ytkRKjHSKwCIMTGew==
   dependencies:
     "@json-rpc-tools/utils" "^1.7.6"
     "@randlabs/myalgo-connect" "^1.1.0"
-    "@walletconnect/client" "^1.6.5"
-    "@walletconnect/qrcode-modal" "^1.6.5"
+    "@walletconnect/client" "^1.8.0"
+    "@walletconnect/qrcode-modal" "^1.8.0"
     algorand-walletconnect-qrcode-modal "^1.6.1"
     algosdk "^1.21.0"
     buffer "^6.0.3"
