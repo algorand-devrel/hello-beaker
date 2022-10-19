@@ -1,1 +1,18 @@
-{"name": "HelloBeaker", "methods": [{"name": "hello", "args": [{"type": "string", "name": "name"}], "returns": {"type": "string"}}], "networks": {}}
+{
+    "name": "HelloBeaker",
+    "methods": [
+        {
+            "name": "hello",
+            "args": [
+                {
+                    "type": "string",
+                    "name": "name"
+                }
+            ],
+            "returns": {
+                "type": "string"
+            }
+        }
+    ],
+    "networks": {}
+}
