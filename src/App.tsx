@@ -11,6 +11,7 @@ import { HelloBeaker } from "./hellobeaker_client";
 import WalletSelector from "./WalletSelector";
 import { AppBar, Box, Grid, Input, Toolbar } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { useWallet } from "@txnlab/use-wallet";
 
 // AnonClient can still allow reads for an app but no transactions
 // can be signed
@@ -37,9 +38,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   // Set up user wallet from session
-  const [accountSettings, setAccountSettings] = useState<SessionWalletData>(
-    SessionWalletManager.read(network)
-  );
+  const {accounts, activeAccount, signer} = useWallet()
 
   // Init our app client
   const [appClient, setAppClient] = useState<HelloBeaker>(
@@ -49,20 +48,21 @@ export default function App() {
   // If the account info, client, or app id change
   // update our app client
   useEffect(() => {
+    console.log("hi")
     // Bad way to track connected status but...
-    if (accountSettings.data.acctList.length == 0 && appClient.sender !== "") {
+    if (activeAccount === null && appClient.sender !== "") {
       setAppClient(AnonClient(algodClient, appId));
-    }else if (SessionWalletManager.connected(network) && SessionWalletManager.address(network) != appClient.sender){
+    }else if (activeAccount !== null && activeAccount.address != appClient.sender){
       setAppClient(
         new HelloBeaker({
           client: algodClient,
-          signer: SessionWalletManager.signer(network),
-          sender: SessionWalletManager.address(network),
+          signer: signer,
+          sender: activeAccount.address,
           appId: appId,
         })
       );
     }
-  }, [accountSettings, appId, algodClient]);
+  }, [activeAccount, appId, algodClient]);
 
   // Deploy the app on chain
   async function createApp() {
@@ -112,11 +112,7 @@ export default function App() {
               lets us provide an input for logging in with different wallets
               and updating session and in memory state
             */}
-            <WalletSelector
-              network={network}
-              accountSettings={accountSettings}
-              setAccountSettings={setAccountSettings}
-            />
+            <WalletSelector network={network} />
           </Box>
         </Toolbar>
       </AppBar>
