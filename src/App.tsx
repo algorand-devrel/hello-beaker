@@ -26,7 +26,7 @@ export default function App() {
   // Otherwise it'd come in as part of conf
   const [appId, setAppId] = useState<number>(0);
 
-  // Setup config for client/network. 
+  // Setup config for client/network.
   const [apiProvider, setApiProvider] = useState(APIProvider.Sandbox);
   const [network, setNetwork] = useState(Network.SandNet);
   // Init our algod client
@@ -35,7 +35,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   // Set up user wallet from session
-  const {accounts, activeAccount, signer} = useWallet()
+  const { accounts, activeAccount, signer } = useWallet();
 
   // Init our app client
   const [appClient, setAppClient] = useState<HelloBeaker>(
@@ -45,11 +45,14 @@ export default function App() {
   // If the account info, client, or app id change
   // update our app client
   useEffect(() => {
-    console.log("hi")
+    console.log("hi");
     // Bad way to track connected status but...
     if (activeAccount === null && appClient.sender !== "") {
       setAppClient(AnonClient(algodClient, appId));
-    }else if (activeAccount !== null && activeAccount.address != appClient.sender){
+    } else if (
+      activeAccount !== null &&
+      activeAccount.address != appClient.sender
+    ) {
       setAppClient(
         new HelloBeaker({
           client: algodClient,
@@ -63,20 +66,20 @@ export default function App() {
 
   // Deploy the app on chain
   async function createApp() {
-    setLoading(true)
-    const {appId} = await appClient.create();
+    setLoading(true);
+    const { appId } = await appClient.create();
     setAppId(appId);
     alert(`Created app: ${appId}`);
-    setLoading(false)
+    setLoading(false);
   }
 
   // Call the greet function
   async function greet() {
-    setLoading(true)
+    setLoading(true);
     const ta = document.getElementById("name") as HTMLTextAreaElement;
     const result = await appClient.hello({ name: ta.value });
     alert(result.value);
-    setLoading(false)
+    setLoading(false);
   }
 
   // The two actions we allow
