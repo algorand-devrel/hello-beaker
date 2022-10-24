@@ -1,11 +1,7 @@
 import algosdk from "algosdk";
 import { useState, useEffect } from "react";
 import { Network, APIProvider, getAlgodClient } from "beaker-ts/lib/clients";
-import {
-  PlaceHolderSigner,
-  SessionWalletManager,
-  SessionWalletData,
-} from "beaker-ts/lib/web";
+import { PlaceHolderSigner } from "beaker-ts/lib/web";
 import { HelloBeaker } from "./hellobeaker_client";
 
 import WalletSelector from "./WalletSelector";
@@ -17,6 +13,7 @@ import { useWallet } from "@txnlab/use-wallet";
 // can be signed
 const AnonClient = (client: algosdk.Algodv2, appId: number): HelloBeaker => {
   return new HelloBeaker({
+    // @ts-ignore
     client: client,
     signer: PlaceHolderSigner,
     sender: "",

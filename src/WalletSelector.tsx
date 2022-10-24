@@ -29,25 +29,19 @@ export default function WalletSelector(props: WalletSelectorProps) {
   const [selectorOpen, setSelectorOpen] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const { disconnect,  activeAccount } = useConnectWallet();
-        // <Select
-        //   onChange={handleChangeAccount}
-        //   variant="standard"
-        //   value={accountSettings.data.defaultAcctIdx}
-        // >
-        //   {accountSettings.data.acctList.map((addr, idx) => {
-        //     return (
-        //       <MenuItem value={idx} key={idx}>
-        //         {addr.slice(0, 8)}
-        //       </MenuItem>
-        //     );
-        //   })}
-        // </Select>
+  const { disconnect,  activeAccount, accounts, selectActiveAccount } = useConnectWallet();
 
   async function disco(){
     if(activeAccount === null) return;
     await disconnect(activeAccount.providerId)
   }
+
+  async function handleChangeAccount(e: any){
+    if (activeAccount === null) return;
+    const newAddress: string = e.target.value;
+    selectActiveAccount(activeAccount?.providerId, newAddress)
+  }
+
   const display = !activeAccount ? (
     <LoadingButton
       variant="contained"
@@ -61,10 +55,27 @@ export default function WalletSelector(props: WalletSelectorProps) {
     </LoadingButton>
   ) : (
     <Box>
-        <Button color='secondary' variant='contained'>{activeAccount.address.substring(0,8)}...</Button>
-        <IconButton onClick={disco} size="small">
-          <CloseIcon htmlColor="red" />
-        </IconButton>
+
+
+      <ButtonGroup>
+          <Select
+            onChange={handleChangeAccount}
+            variant="outlined"
+            value={activeAccount.address}
+          >
+            {accounts.map((acct) => {
+              return (
+                <MenuItem value={acct.address} key={acct.address}>
+                  {acct.address.slice(0, 8)}
+                </MenuItem>
+              );
+            })}
+          </Select>
+          <IconButton onClick={disco} size="small">
+            <CloseIcon htmlColor="red" />
+          </IconButton>
+
+      </ButtonGroup>
     </Box>
   );
 
