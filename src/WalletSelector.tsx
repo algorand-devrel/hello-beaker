@@ -19,7 +19,7 @@ import {
 
 import LoadingButton from "@mui/lab/LoadingButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { useConnectWallet, useWallet } from "@txnlab/use-wallet";
+import { useConnectWallet, useWallet, PROVIDER_ID } from "@txnlab/use-wallet";
 
 type WalletSelectorProps = {
   network: string;
@@ -30,7 +30,7 @@ export default function WalletSelector(props: WalletSelectorProps) {
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const { disconnect, activeAccount, accounts, selectActiveAccount } =
-    useConnectWallet();
+    useConnectWallet({ providers: [PROVIDER_ID.ALGO_SIGNER, PROVIDER_ID.KMD_WALLET] });
 
   async function disco() {
     if (activeAccount === null) return;
@@ -96,8 +96,7 @@ type WalletSelectorDialogProps = {
 };
 
 function WalletSelectorDialog(props: WalletSelectorDialogProps) {
-  const { providers, reconnectProviders } = useConnectWallet();
-
+  const { providers, reconnectProviders } = useConnectWallet({ providers: [PROVIDER_ID.ALGO_SIGNER, PROVIDER_ID.KMD_WALLET] });
   // Reconnect the session when the user returns to the dApp
   React.useEffect(() => {
     reconnectProviders();
