@@ -19,60 +19,31 @@ import {
 
 import LoadingButton from "@mui/lab/LoadingButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { WalletName } from "beaker-ts/lib/web/session_wallet";
+import { useConnectWallet, useWallet, PROVIDER_ID } from "@txnlab/use-wallet";
 
 type WalletSelectorProps = {
   network: string;
-  accountSettings: SessionWalletData;
-  setAccountSettings: (swd: SessionWalletData) => void;
 };
 
 export default function WalletSelector(props: WalletSelectorProps) {
   const [selectorOpen, setSelectorOpen] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const { network, accountSettings, setAccountSettings } = props;
 
-  //React.useEffect(() => {
-  //  if (connected) return;
+  const { disconnect, activeAccount, accounts, selectActiveAccount } =
+    useConnectWallet({ providers: [PROVIDER_ID.ALGO_SIGNER, PROVIDER_ID.KMD_WALLET] });
 
-  //  let interval: any;
-  //  wallet.connect().then((success) => {
-  //    if (!success) return;
-  //    // Check every 500ms to see if we've connected then kill the interval
-  //    // This is most useful in the case of walletconnect where it may be several
-  //    // seconds before the user connects
-  //    interval = setInterval(() => {
-  //      if (wallet.connected()) {
-  //        clearInterval(interval);
-  //        //updateWallet(sessionWallet);
-  //      }
-  //    }, 500);
-  //  });
-  //  return () => {
-  //    clearInterval(interval);
-  //  };
-  //}, [wallet]);
-
-  function disconnectWallet() {
-    SessionWalletManager.disconnect(network);
-    setAccountSettings(SessionWalletManager.read(network));
+  async function disco() {
+    if (activeAccount === null) return;
+    await disconnect(activeAccount.providerId);
   }
 
-  function handleChangeAccount(e: any) {
-    const acctIdx = parseInt(e.target.value);
-    SessionWalletManager.setAcctIdx(network, acctIdx);
-    setAccountSettings(SessionWalletManager.read(network));
+  async function handleChangeAccount(e: any) {
+    if (activeAccount === null) return;
+    const newAddress: string = e.target.value;
+    selectActiveAccount(activeAccount?.providerId, newAddress);
   }
 
-  async function handleSelectedWallet(choice: string) {
-    SessionWalletManager.setWalletPreference(network, choice as WalletName);
-    setLoading(true)
-    await SessionWalletManager.connect(network);
-    setAccountSettings(SessionWalletManager.read(network));
-    setLoading(false)
-  }
-
-  const display = !accountSettings.data.acctList.length ? (
+  const display = !activeAccount ? (
     <LoadingButton
       variant="contained"
       loading={loading}
@@ -85,21 +56,21 @@ export default function WalletSelector(props: WalletSelectorProps) {
     </LoadingButton>
   ) : (
     <Box>
-      <ButtonGroup variant="text">
+      <ButtonGroup>
         <Select
           onChange={handleChangeAccount}
-          variant="standard"
-          value={accountSettings.data.defaultAcctIdx}
+          variant="outlined"
+          value={activeAccount.address}
         >
-          {accountSettings.data.acctList.map((addr, idx) => {
+          {accounts.map((acct) => {
             return (
-              <MenuItem value={idx} key={idx}>
-                {addr.slice(0, 8)}
+              <MenuItem value={acct.address} key={acct.address}>
+                {acct.address.slice(0, 8)}
               </MenuItem>
             );
           })}
         </Select>
-        <IconButton onClick={disconnectWallet} size="small">
+        <IconButton onClick={disco} size="small">
           <CloseIcon htmlColor="red" />
         </IconButton>
       </ButtonGroup>
@@ -111,7 +82,6 @@ export default function WalletSelector(props: WalletSelectorProps) {
       {display}
       <WalletSelectorDialog
         open={selectorOpen}
-        handleSelection={handleSelectedWallet}
         onClose={() => {
           setSelectorOpen(false);
         }}
@@ -122,49 +92,46 @@ export default function WalletSelector(props: WalletSelectorProps) {
 
 type WalletSelectorDialogProps = {
   open: boolean;
-  handleSelection(value: string): void;
   onClose(): void;
 };
 
 function WalletSelectorDialog(props: WalletSelectorDialogProps) {
-  function handleWalletSelected(e: any) {
-    props.handleSelection(e.currentTarget.id);
-    props.onClose();
-  }
+  const { providers, reconnectProviders } = useConnectWallet({ providers: [PROVIDER_ID.ALGO_SIGNER, PROVIDER_ID.KMD_WALLET] });
+  // Reconnect the session when the user returns to the dApp
+  React.useEffect(() => {
+    reconnectProviders();
+  }, []);
 
-  const walletOptions = [];
-  for (const [k, v] of Object.entries(ImplementedWallets)) {
-    const imgSrc = v.img(false);
-    const imgContent =
-      imgSrc === "" ? (
-        <div></div>
-      ) : (
-        <img alt="wallet-branding" style={{width:"2em", margin:"0.5em"}} src={imgSrc} />
-      );
-
-    walletOptions.push(
-      <li key={k} style={{margin:"1em"}}>
-        <Button id={k} variant="outlined" onClick={handleWalletSelected}>
-          {imgContent}
-          <Box sx={{display:"flex", alignItems:"center"}}>
-            <h5>{v.displayName()}</h5>
-          </Box>
-        </Button>
-      </li>
-    );
-  }
-
+  // Use these properties to display connected accounts to users.
+  // They are reactive and presisted to local storage.
   return (
-    <div>
-      <Dialog open={props.open} onClose={props.onClose}>
-        <DialogTitle> Select Wallet </DialogTitle>
-        <DialogContent>
-          <ul style={{listStyle:"none"}} >{walletOptions}</ul>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onClose}> cancel </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog open={props.open} onClose={props.onClose}>
+      <DialogTitle> Select Wallet </DialogTitle>
+      <DialogContent>
+        <ul style={{ listStyle: "none" }}>
+          {providers.map((provider) => (
+            <li key={"provider-" + provider.id} style={{ margin: "0.25em" }}>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  provider.connect();
+                  props.onClose();
+                }}
+                disabled={provider.isConnected}
+              >
+                <img
+                  style={{ height: "30px", width: "30px", margin: "0.5em" }}
+                  src={provider.icon}
+                />
+                <h5>{provider.name} </h5>
+              </Button>
+            </li>
+          ))}
+        </ul>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onClose}> Cancel </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
