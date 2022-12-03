@@ -6,10 +6,15 @@ An example to show the use of a [Beaker](https://beaker.algo.xyz) application to
 
 ### Get it
 
-download the beaker repo and install dependencies 
+download the beaker repo
 
 ```sh
 git clone git@github.com:algorand-devrel/hello-beaker.git
+# Or 
+git clone https://github.com/algorand-devrel/hello-beaker.git
+```
+install dependencies 
+```
 cd hello-beaker
 yarn #installs stuff
 ```
