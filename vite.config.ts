@@ -15,6 +15,7 @@ export default defineConfig({
       path: "path-browserify",
       stream: "stream-browserify",
       zlib: "zlib-browserify",
+      buffer: "buffer/"
     },
   },
 });

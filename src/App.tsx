@@ -4,10 +4,9 @@ import { Network, APIProvider, getAlgodClient } from "beaker-ts/lib/clients";
 import { PlaceHolderSigner } from "beaker-ts/lib/web";
 import { HelloBeaker } from "./hellobeaker_client";
 
-import WalletSelector from "./WalletSelector";
 import { AppBar, Box, Grid, Input, Toolbar } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { useWallet } from "@txnlab/use-wallet";
+import { useWalletUI, WalletUI } from '@algoscan/use-wallet-ui'
 
 // AnonClient can still allow reads for an app but no transactions
 // can be signed
@@ -35,17 +34,22 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   // Set up user wallet from session
-  const { accounts, activeAccount, signer } = useWallet();
+  const { activeAccount, signer } = useWalletUI();
 
   // Init our app client
   const [appClient, setAppClient] = useState<HelloBeaker>(
     AnonClient(algodClient, appId)
   );
 
+  const x  = useWalletUI()
+  useEffect(()=>{
+    console.log(x)
+  }, [x])
+
   // If the account info, client, or app id change
   // update our app client
   useEffect(() => {
-    console.log("hi");
+    console.log(activeAccount, appId, algodClient)
     // Bad way to track connected status but...
     if (activeAccount === null && appClient.sender !== "") {
       setAppClient(AnonClient(algodClient, appId));
@@ -67,6 +71,7 @@ export default function App() {
   // Deploy the app on chain
   async function createApp() {
     setLoading(true);
+    console.log(appClient)
     const { appId } = await appClient.create();
     setAppId(appId);
     alert(`Created app: ${appId}`);
@@ -112,7 +117,7 @@ export default function App() {
               lets us provide an input for logging in with different wallets
               and updating session and in memory state
             */}
-            <WalletSelector network={network} />
+            <WalletUI primary='green' textColor='#FF0000' />
           </Box>
         </Toolbar>
       </AppBar>
