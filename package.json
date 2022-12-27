@@ -10,6 +10,7 @@
     "rebuild": "npx beaker generate contracts/artifacts/application.json src/"
   },
   "dependencies": {
+    "@algoscan/use-wallet-ui": "^1.0.8",
     "@blockshake/defly-connect": "^1.0.0",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
